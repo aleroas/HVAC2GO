@@ -1,6 +1,6 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors'); // Import the cors package
 require('dotenv').config(); // Load environment variables
 
 const app = express();
@@ -8,6 +8,11 @@ const port = 3001;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+//allow requests from our React app's domain
+app.use(cors({
+  origin: 'http://localhost:5173' 
+}));
 
 // Use environment variables for connection string
 const { MONGO_USER, MONGO_PASSWORD, MONGO_DB, MONGO_HOST, MONGO_PORT } = process.env;
