@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Allow requests from our React app's domain
 app.use(cors({ 
-  origin: 'http://localhost:5173' 
+  origin: ['http://localhost:5173', 'https://hvac2go.onrender.com'] 
 }));
 
 // Use environment variables for connection string
