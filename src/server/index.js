@@ -1,7 +1,10 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors'); // Import the cors package
-require('dotenv').config(); // Load environment variables
+// index.js
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors'; // Import the cors package
+import dotenv from 'dotenv'; // Import dotenv package
+
+dotenv.config(); // Load environment variables
 
 const app = express();
 const port = 3001;
@@ -9,7 +12,7 @@ const port = 3001;
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-//allow requests from our React app's domain
+// Allow requests from our React app's domain
 app.use(cors({
   origin: 'http://localhost:5173' 
 }));
