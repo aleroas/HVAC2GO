@@ -13,7 +13,7 @@ const port = 3001;
 app.use(express.json());
 
 // Allow requests from our React app's domain
-app.use(cors({
+app.use(cors({ 
   origin: 'http://localhost:5173' 
 }));
 
