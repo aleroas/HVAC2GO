@@ -1,35 +1,27 @@
-// index.js
 import express from 'express';
 import mongoose from 'mongoose';
-import cors from 'cors'; // Import the cors package
-import dotenv from 'dotenv'; // Import dotenv package
+import cors from 'cors';
+import dotenv from 'dotenv';
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
 const app = express();
 const port = 3001;
 
-// Middleware to parse JSON bodies
 app.use(express.json());
 
-// Allow requests from our React app's domain
 app.use(cors({ 
   origin: ['http://localhost:5173', 'https://hvac2go.onrender.com'] 
 }));
 
-// Use environment variables for connection string
-const { MONGO_USER, MONGO_PASSWORD, MONGO_DB, MONGO_HOST, MONGO_PORT } = process.env;
+const { MONGO_CONNECTION_STRING } = process.env;
 
-// Constructed the connection string for MongoDB with authentication
-const connectionString = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
-
-mongoose.connect(connectionString, {
+mongoose.connect(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  authMechanism: 'SCRAM-SHA-256' 
 })
   .then(() => {
-    console.log('Connected successfully to MongoDB');
+    console.log('Connected successfully to MongoDB Atlas');
     app.listen(port, () => {
       console.log(`Server is listening at http://localhost:${port}`);
     });
