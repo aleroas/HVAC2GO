@@ -1,12 +1,14 @@
+// index.js
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 app.use(express.json());
 
@@ -15,6 +17,9 @@ app.use(cors({
 }));
 
 const { MONGO_CONNECTION_STRING } = process.env;
+
+// Serve static files from the "dist/assets" directory
+app.use('/assets', express.static(path.join(__dirname, 'dist/assets')));
 
 mongoose.connect(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
@@ -29,3 +34,13 @@ mongoose.connect(MONGO_CONNECTION_STRING, {
   .catch((err) => {
     console.error('Mongo connection error: ', err.message);
   });
+
+// Handle the root route to serve the index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+// Handle all other routes by serving the index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});

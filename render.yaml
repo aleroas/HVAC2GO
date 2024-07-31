@@ -9,27 +9,6 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: MONGO_USER
-        fromDatabase:
-          name: hvac-db
-          property: username
-      - key: MONGO_PASSWORD
-        fromDatabase:
-          name: hvac-db
-          property: password
-      - key: MONGO_DB
-        value: Explorify
-      - key: MONGO_HOST
-        fromDatabase:
-          name: hvac-db
-          property: host
-      - key: MONGO_PORT
-        fromDatabase:
-          name: hvac-db
-          property: port
+      - key: MONGO_CONNECTION_STRING
+        fromSecret: MONGO_CONNECTION_STRING
 
-databases:
-  - name: hvac-db
-    plan: free
-    databaseName: Explorify
-    user: sylo777
