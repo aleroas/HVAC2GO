@@ -1,3 +1,4 @@
+// index.js
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -22,8 +23,8 @@ const { MONGO_CONNECTION_STRING } = process.env;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the "dist/assets" directory
-app.use('/assets', express.static(path.join(__dirname, 'dist/assets')));
+// Serve static files from the "dist" directory
+app.use(express.static(path.join(__dirname, 'dist')));
 
 mongoose.connect(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
