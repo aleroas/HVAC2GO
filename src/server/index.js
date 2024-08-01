@@ -3,9 +3,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
 dotenv.config();
 
 const app = express();
@@ -18,13 +15,6 @@ app.use(cors({
 }));
 
 const { MONGO_CONNECTION_STRING } = process.env;
-
-// Use import.meta.url to get the directory name
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Serve static files from the "dist" directory
-app.use(express.static(path.join(__dirname, 'dist')));
 
 mongoose.connect(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
@@ -40,12 +30,3 @@ mongoose.connect(MONGO_CONNECTION_STRING, {
     console.error('Mongo connection error: ', err.message);
   });
 
-// Handle the root route to serve the index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-// Handle all other routes by serving the index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
