@@ -24,7 +24,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Serve static files from the "dist" directory
-app.use(express.static(path.join(__dirname, '..', 'dist')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 mongoose.connect(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
@@ -40,12 +40,7 @@ mongoose.connect(MONGO_CONNECTION_STRING, {
     console.error('Mongo connection error: ', err.message);
   });
 
-//Handle the root route to serve the index.html
-app.get('/', (req, res) => {
+// Handle all other routes by serving the index.html
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
-
-// // Handle all other routes by serving the index.html
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-// });
