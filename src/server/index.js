@@ -23,8 +23,8 @@ const { MONGO_CONNECTION_STRING } = process.env;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the "dist" directory
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve static files from the "dist" directory at the root of the project
+app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
 
 mongoose.connect(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
@@ -42,5 +42,5 @@ mongoose.connect(MONGO_CONNECTION_STRING, {
 
 // Handle all other routes by serving the index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
 });
