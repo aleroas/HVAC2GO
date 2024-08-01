@@ -1,3 +1,4 @@
+//animation for our project
 import { motion } from 'framer-motion';
 
 const HeatingWalkthrough = () => {
