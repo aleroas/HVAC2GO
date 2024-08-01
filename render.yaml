@@ -11,4 +11,4 @@ services:
         value: production
       - key: MONGO_CONNECTION_STRING
         fromSecret: MONGO_CONNECTION_STRING
-
+    staticPublishPath: dist  
