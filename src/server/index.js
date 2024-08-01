@@ -1,9 +1,9 @@
-// index.js
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
@@ -17,6 +17,10 @@ app.use(cors({
 }));
 
 const { MONGO_CONNECTION_STRING } = process.env;
+
+// Use import.meta.url to get the directory name
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Serve static files from the "dist/assets" directory
 app.use('/assets', express.static(path.join(__dirname, 'dist/assets')));
