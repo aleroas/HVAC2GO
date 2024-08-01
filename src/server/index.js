@@ -24,7 +24,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Serve static files from the "dist" directory
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 mongoose.connect(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
