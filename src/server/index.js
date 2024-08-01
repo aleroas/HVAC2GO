@@ -40,10 +40,10 @@ mongoose.connect(MONGO_CONNECTION_STRING, {
     console.error('Mongo connection error: ', err.message);
   });
 
-// Handle the root route to serve the index.html
-// app.get('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-// });
+//Handle the root route to serve the index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 // // Handle all other routes by serving the index.html
 // app.get('*', (req, res) => {
