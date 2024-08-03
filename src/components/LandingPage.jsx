@@ -15,11 +15,16 @@ const LandingPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      {/* Logo at the top center, without margin */}
+      <div className="absolute top-0 left-0 right-0 flex justify-center pt-4">
+        <img src="/images/hvaclogo2.png" alt="Logo" className="w-54 h-42" />
+      </div>
+
       <motion.h1
         initial={{ x: -1000 }}
         animate={{ x: 0 }}
         transition={{ duration: 1 }}
-        className="text-4xl font-bold text-center text-gray-800"
+        className="text-4xl font-bold text-center text-gray-800 mt-20"
       >
         Looking to diagnose a problem? Choose a free Walkthrough that is best for you!
       </motion.h1>
