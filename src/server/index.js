@@ -1,10 +1,11 @@
-// index.js
+// src/server/index.js
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import userRoutes from './routes/userRoutes'; // Import your routes
 
 dotenv.config();
 
@@ -13,8 +14,8 @@ const port = process.env.PORT || 3001;
 
 app.use(express.json());
 
-app.use(cors({ 
-  origin: ['http://localhost:5173', 'https://hvac2go.onrender.com'] 
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://hvac2go.onrender.com']
 }));
 
 const { MONGO_CONNECTION_STRING } = process.env;
@@ -23,9 +24,15 @@ const { MONGO_CONNECTION_STRING } = process.env;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+<<<<<<< HEAD
+// Serve static files from the "dist" directory
+app.use(express.static(path.join(__dirname, '../../dist')));
+=======
 // Serve static files from the "dist" directory at the root of the project
 app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
+>>>>>>> d0b2c0e2c82932ca6171a72d879f716f06b04576
 
+// Connect to MongoDB
 mongoose.connect(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -40,7 +47,16 @@ mongoose.connect(MONGO_CONNECTION_STRING, {
     console.error('Mongo connection error: ', err.message);
   });
 
+<<<<<<< HEAD
+// API routes
+app.use('/api', userRoutes);
+
+// Serve the React app for all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../dist', 'index.html'));
+=======
 // Handle all other routes by serving the index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
+>>>>>>> d0b2c0e2c82932ca6171a72d879f716f06b04576
 });
