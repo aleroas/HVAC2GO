@@ -6,8 +6,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 // import userRoutes from './routes/userRoutes'; // Import your routes
-import userRoutes from 'file:///C:/Users/Edwin/bootcamp/projects/HVAC2GO/src/server/routes/userRoutes.js';
-
+import userRoutes from './routes/userRoutes'
 
 dotenv.config();
 
