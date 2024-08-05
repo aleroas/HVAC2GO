@@ -5,8 +5,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import userRoutes from './routes/userRoutes'; // Import your routes
-import userRoutes from './routes/userRoutes'
+import userRoutes from './routes/userRoutes.js'; // Note the .js extension
+
 
 dotenv.config();
 
