@@ -1,10 +1,10 @@
-// src/components/ConnectTechnician.jsx
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const ConnectTechnician = () => {
   const [isTextVisible, setTextVisible] = useState(false);
   const [paidFor, setPaidFor] = useState(false);
+  const [paypalScriptLoaded, setPaypalScriptLoaded] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setTextVisible(true), 500);
@@ -15,30 +15,35 @@ const ConnectTechnician = () => {
       .then(data => {
         const script = document.createElement('script');
         script.src = `https://www.paypal.com/sdk/js?client-id=${data.clientId}`;
-        script.addEventListener('load', () => {
-          window.paypal.Buttons({
-            createOrder: (data, actions) => {
-              return actions.order.create({
-                purchase_units: [{
-                  amount: {
-                    value: '49.99'
-                  }
-                }]
-              });
-            },
-            onApprove: async (data, actions) => {
-              const order = await actions.order.capture();
-              setPaidFor(true);
-              console.log(order);
-            },
-            onError: (err) => {
-              console.error(err);
-            }
-          }).render('#paypal-button-container');
-        });
+        script.addEventListener('load', () => setPaypalScriptLoaded(true));
         document.body.appendChild(script);
-      });
+      })
+      .catch(error => console.error('Failed to load PayPal client ID', error));
   }, []);
+
+  useEffect(() => {
+    if (paypalScriptLoaded) {
+      window.paypal.Buttons({
+        createOrder: (data, actions) => {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: '49.99'
+              }
+            }]
+          });
+        },
+        onApprove: async (data, actions) => {
+          const order = await actions.order.capture();
+          setPaidFor(true);
+          console.log(order);
+        },
+        onError: (err) => {
+          console.error(err);
+        }
+      }).render('#paypal-button-container');
+    }
+  }, [paypalScriptLoaded]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -58,7 +63,7 @@ const ConnectTechnician = () => {
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Add your payment details here</h2>
         {/* Billing Address Fields */}
-        {/* ... (existing form fields) */}
+        {/* Add your billing address fields here */}
 
         {/* PayPal Payment Option */}
         <div className="mt-8 text-center">
