@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 
 
 //animation for our project
-=======
->>>>>>> df738cf473b691e8d45b80912640bc2031d90afd
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
