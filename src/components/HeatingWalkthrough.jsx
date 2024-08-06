@@ -1,6 +1,4 @@
-
-
-//animation for our project
+//heatingWalkthrough.jsx
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
