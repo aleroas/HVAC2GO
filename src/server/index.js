@@ -6,6 +6,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import userRoutes from './routes/userRoutes.js'; // Note the .js extension
+// import userRoutes from '../src/server/routes/userRoutes.js'; // Note the .js extension
 import paypalRoutes from './routes/paypalRoutes.js';
 dotenv.config();
 
