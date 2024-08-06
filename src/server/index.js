@@ -6,9 +6,12 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import userRoutes from './routes/userRoutes.js'; // Note the .js extension
-
-
+import paypalRoutes from './routes/paypalRoutes.js';
 dotenv.config();
+
+const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+const PAYPAL_SECRET_KEY = process.env.PAYPAL_SECRET_KEY;
+
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -52,6 +55,7 @@ mongoose.connect(MONGO_CONNECTION_STRING)
   
 // API routes
 app.use('/api', userRoutes);
+app.use('/api', paypalRoutes);
 
 // Serve the React app for all other routes
 app.get('*', (req, res) => {

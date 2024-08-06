@@ -4,15 +4,41 @@ import { motion } from 'framer-motion';
 
 const ConnectTechnician = () => {
   const [isTextVisible, setTextVisible] = useState(false);
+  const [paidFor, setPaidFor] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setTextVisible(true), 500);
-  }, []);
 
-  const handlePaymentSubmit = (event) => {
-    event.preventDefault();
-    // Handle payment submission logic here
-  };
+    // Fetch PayPal client ID from the server
+    fetch('/api/paypal-client-id')
+      .then(response => response.json())
+      .then(data => {
+        const script = document.createElement('script');
+        script.src = `https://www.paypal.com/sdk/js?client-id=${data.clientId}`;
+        script.addEventListener('load', () => {
+          window.paypal.Buttons({
+            createOrder: (data, actions) => {
+              return actions.order.create({
+                purchase_units: [{
+                  amount: {
+                    value: '49.99'
+                  }
+                }]
+              });
+            },
+            onApprove: async (data, actions) => {
+              const order = await actions.order.capture();
+              setPaidFor(true);
+              console.log(order);
+            },
+            onError: (err) => {
+              console.error(err);
+            }
+          }).render('#paypal-button-container');
+        });
+        document.body.appendChild(script);
+      });
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -31,96 +57,14 @@ const ConnectTechnician = () => {
       {/* Payment Form */}
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Add your payment details here</h2>
-        <form onSubmit={handlePaymentSubmit}>
-          {/* Billing Address Fields */}
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
-              Billing Address
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="address"
-              type="text"
-              placeholder="Billing Address"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">
-              City
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="city"
-              type="text"
-              placeholder="City"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="state">
-              State
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="state"
-              type="text"
-              placeholder="State"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="zip">
-              Zip Code
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="zip"
-              type="text"
-              placeholder="Zip Code"
-            />
-          </div>
+        {/* Billing Address Fields */}
+        {/* ... (existing form fields) */}
 
-          {/* Card Details */}
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="card-number">
-              Card Number
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="card-number"
-              type="text"
-              placeholder="Card Number"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="expiry-date">
-              Expiry Date
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="expiry-date"
-              type="text"
-              placeholder="MM/YY"
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cvv">
-              CVV
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="cvv"
-              type="text"
-              placeholder="CVV"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Pay $49.99
-            </button>
-          </div>
-        </form>
+        {/* PayPal Payment Option */}
+        <div className="mt-8 text-center">
+          <p className="text-lg font-medium text-gray-800 mb-4">Pay with</p>
+          <div id="paypal-button-container"></div>
+        </div>
 
         {/* Connect Via Icons */}
         <div className="mt-8 text-center">
