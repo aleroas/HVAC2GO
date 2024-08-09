@@ -10,6 +10,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  password: {
+    type: String,
+    required: true,
+    select: false // Ensure password is not returned by default
+  },
   phoneNumber: {
     type: String,
     required: true,

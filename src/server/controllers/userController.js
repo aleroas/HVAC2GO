@@ -5,6 +5,14 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const generateToken = (user) => {
+  return jwt.sign(
+    { id: user.id },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+};
+
 // Register a new user
 export const registerUser = async (req, res) => {
   const { name, email, password, phoneNumber } = req.body;
@@ -23,21 +31,8 @@ export const registerUser = async (req, res) => {
 
     await user.save();
 
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
+    const token = generateToken(user);
+    res.status(201).json({ token });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
@@ -48,32 +43,32 @@ export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({ email });
+    console.log('Login request received for email:', email);
+
+    if (!email || !password) {
+      console.error('Email or password is missing');
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    // Ensure the password field is included when fetching the user
+    let user = await User.findOne({ email }).select('+password');
     if (!user) {
+      console.error('User not found:', email);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
+
+    console.log('User found:', user);
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.error('Password does not match for user:', email);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
+    const token = generateToken(user);
+    res.json({ token });
   } catch (err) {
+    console.error('Error during login:', err.message);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -81,7 +76,7 @@ export const loginUser = async (req, res) => {
 // Get all users (protected route)
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().select('-password');
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -91,7 +86,7 @@ export const getUsers = async (req, res) => {
 // Get a single user by ID (protected route)
 export const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).select('-password');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -104,7 +99,7 @@ export const getUserById = async (req, res) => {
 // Update a user by ID (protected route)
 export const updateUserById = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).select('-password');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
