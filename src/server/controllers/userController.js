@@ -13,65 +13,62 @@ const generateToken = (user) => {
   );
 };
 
-// Register a new user
 export const registerUser = async (req, res) => {
-  const { name, email, password, phoneNumber } = req.body;
-
   try {
+    const { name, email, password, phoneNumber } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !password || !phoneNumber) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     user = new User({ name, email, password, phoneNumber });
 
-    // Hash password before saving in database
+    // Hash the password before saving
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
 
     await user.save();
 
     const token = generateToken(user);
-    res.status(201).json({ token });
+    res.status(201).json({ token, message: "Registration successful" });
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error during registration:", err.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// Authenticate user and get token
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    console.log('Login request received for email:', email);
+    const { email, password } = req.body;
 
     if (!email || !password) {
-      console.error('Email or password is missing');
-      return res.status(400).json({ message: 'Email and password are required' });
+      return res.status(400).json({ message: "Email and password are required" });
     }
 
-    // Ensure the password field is included when fetching the user
-    let user = await User.findOne({ email }).select('+password');
+    let user = await User.findOne({ email });
     if (!user) {
-      console.error('User not found:', email);
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
-
-    console.log('User found:', user);
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.error('Password does not match for user:', email);
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const token = generateToken(user);
-    res.json({ token });
+    res.status(200).json({ token, message: "Login successful" });
   } catch (err) {
-    console.error('Error during login:', err.message);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error during login:", err.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 // Get all users (protected route)
 export const getUsers = async (req, res) => {

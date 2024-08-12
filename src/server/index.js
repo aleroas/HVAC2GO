@@ -54,7 +54,7 @@ app.get('/test', (req, res) => {
 });
 
 // API routes
-app.use('/api', userRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api', paypalRoutes);
 
 // Serve the React app for all other routes
