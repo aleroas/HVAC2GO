@@ -18,7 +18,8 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://hvac2go.onrender.com']
+  origin: ['http://localhost:5173', 'https://hvac2go.onrender.com'],
+  credentials: true,
 }));
 
 const MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;

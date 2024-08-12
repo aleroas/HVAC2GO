@@ -1,17 +1,17 @@
-import React from 'react';
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Login from './Login';
+import Register from './Register';
 
-const ConnectTechnician = () => {
+const ConnectTechnician = ({ isAuthenticated }) => {
   const [isTextVisible, setTextVisible] = useState(false);
   const [paidFor, setPaidFor] = useState(false);
   const [paypalScriptLoaded, setPaypalScriptLoaded] = useState(false);
+  const [showLogin, setShowLogin] = useState(true); // New state to toggle between login and register
 
   useEffect(() => {
     setTimeout(() => setTextVisible(true), 500);
 
-    // Fetch PayPal client ID from the server
     fetch('/api/paypal-client-id')
       .then(response => response.json())
       .then(data => {
@@ -47,9 +47,42 @@ const ConnectTechnician = () => {
     }
   }, [paypalScriptLoaded]);
 
+  if (!isAuthenticated) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        {isTextVisible && (
+          <motion.h1
+            initial={{ x: -1000 }}
+            animate={{ x: 0 }}
+            transition={{ duration: 1 }}
+            className="text-4xl font-bold text-center text-gray-800 mb-8"
+          >
+            Connect to a technician here!
+          </motion.h1>
+        )}
+        
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">{showLogin ? 'Login' : 'Register'}</h2>
+          {showLogin ? (
+            <Login setIsAuthenticated={() => { /* Handle setting authentication here */ }} />
+          ) : (
+            <Register />
+          )}
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => setShowLogin(!showLogin)}
+              className="text-teal-500 hover:underline"
+            >
+              {showLogin ? 'Don\'t have an account? Register' : 'Already have an account? Login'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      {/* Sliding Text */}
       {isTextVisible && (
         <motion.h1
           initial={{ x: -1000 }}
@@ -61,19 +94,9 @@ const ConnectTechnician = () => {
         </motion.h1>
       )}
 
-      {/* Payment Form */}
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Add your payment details here</h2>
-        {/* Billing Address Fields */}
-        {/* Add your billing address fields here */}
-
-        {/* PayPal Payment Option */}
-        <div className="mt-8 text-center">
-          <p className="text-lg font-medium text-gray-800 mb-4">Pay with</p>
-          <div id="paypal-button-container"></div>
-        </div>
-
-        {/* Connect Via Icons */}
+        <div id="paypal-button-container"></div>
         <div className="mt-8 text-center">
           <p className="text-lg font-medium text-gray-800 mb-4">Connect Via..</p>
           <div className="flex justify-center space-x-4">
