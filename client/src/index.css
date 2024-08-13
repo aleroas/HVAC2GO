@@ -74,3 +74,18 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+/* src/index.css or any CSS file you are using */
+@keyframes waveAnimation {
+  0% { background-position: 0 0; }
+  100% { background-position: 1000px 0; } /* Adjust based on your image width */
+}
+
+.bg-wave {
+  background-image: url('/path-to-your-wave-image.png'); /* Ensure you have a wave image */
+  background-size: auto 100%;
+  animation: waveAnimation 10s linear infinite;
+}
+
+.animate-wave {
+  animation: waveAnimation 10s linear infinite;
+}
