@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import collectData from './postdata';
 
 import User from '../../server/models/User'
 
@@ -33,19 +34,14 @@ function Form() {
                     const firstName = document.getElementById('first_name');
                     const lastName = document.getElementById('last_name');
                     const email = document.getElementById('email');
-
-                    const response = await new User(
-                        {
-                            name: firstName.value,
-                            email: email.value,
-                            phoneNumber: 4077817287
-                        }
-                    )
-                    if(response){
-                        console.log(response)
+                    const phone = document.getElementById('phone')
+                    const user = {
+                        name: firstName.value,
+                        email: email.value,
+                        phoneNumber: phone.value
                     }
-
-                    console.log(firstName.value)
+                    const response = await collectData(user);
+                    console.log(response);
                 }}>Submit</button>
                 <button onClick={() => navigate('/')}>Start Over</button>
             </form>
