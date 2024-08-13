@@ -21,7 +21,7 @@ const LandingPage = () => {
         transition={{ duration: 1 }}
         className="text-4xl font-bold text-center text-gray-800"
       >
-        Looking to diagnose a problem? Choose a free Walkthrough that is best for you!
+        Looking to diagnose your HVAC unit? Let us help!
       </motion.h1>
       {isButtonsVisible && (
         <motion.div
@@ -31,22 +31,10 @@ const LandingPage = () => {
           className="flex flex-col mt-8 space-y-4"
         >
           <button
-            onClick={() => navigate('/heating')}
+            onClick={() => navigate('/air-conditioning/diag')}
             className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700"
           >
-            Heating
-          </button>
-          <button
-            onClick={() => navigate('/ventilation')}
-            className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700"
-          >
-            Ventilation
-          </button>
-          <button
-            onClick={() => navigate('/air-conditioning')}
-            className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700"
-          >
-            Air Conditioning
+            GET STARTED
           </button>
         </motion.div>
       )}

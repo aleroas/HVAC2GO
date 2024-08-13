@@ -5,7 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import userRoutes from './routes/userRoutes'; // Import your routes
+
 
 dotenv.config();
 
@@ -18,22 +18,19 @@ app.use(cors({
   origin: ['http://localhost:5173', 'https://hvac2go.onrender.com']
 }));
 
-const { MONGO_CONNECTION_STRING } = process.env;
+
+
+// const { MONGO_CONNECTION_STRING } = process.env;
 
 // Use import.meta.url to get the directory name
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-<<<<<<< HEAD
-// Serve static files from the "dist" directory
-app.use(express.static(path.join(__dirname, '../../dist')));
-=======
 // Serve static files from the "dist" directory at the root of the project
 app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
->>>>>>> d0b2c0e2c82932ca6171a72d879f716f06b04576
 
 // Connect to MongoDB
-mongoose.connect(MONGO_CONNECTION_STRING, {
+mongoose.connect('mongodb://localhost:27017/HVAC2GO', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -47,16 +44,7 @@ mongoose.connect(MONGO_CONNECTION_STRING, {
     console.error('Mongo connection error: ', err.message);
   });
 
-<<<<<<< HEAD
-// API routes
-app.use('/api', userRoutes);
-
-// Serve the React app for all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../dist', 'index.html'));
-=======
 // Handle all other routes by serving the index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
->>>>>>> d0b2c0e2c82932ca6171a72d879f716f06b04576
 });
