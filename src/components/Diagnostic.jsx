@@ -14,7 +14,9 @@ function Diagnostic(){
         <p className="mt-4 text-xl text-gray-600">
         <li>Check operation status of thermostat, inside unit, and outside unit</li>
         <li>Check your breakers</li>
-        <button onClick={() => navigate('/air-conditioning/diag2')}>Go Back</button>
+        <button className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700" onClick={() => navigate('/air-conditioning/diag2')}>NOT RUNNING AT ALL</button>
+        <button className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700" onClick={() => navigate('/air-conditioning/diag3')}>ONLY INSIDE RUNNING</button>
+        <button className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700" onClick={() => navigate('/air-conditioning/diag4')}>ONLY OUTSIDE RUNNING</button>
         </p>
         
       </motion.div>

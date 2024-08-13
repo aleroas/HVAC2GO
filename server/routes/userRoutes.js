@@ -9,4 +9,4 @@ router.get('/users/:id', getUserById);
 router.put('/users/:id', updateUserById);
 router.delete('/users/:id', deleteUserById);
 
-export default router;
+export default {router};
