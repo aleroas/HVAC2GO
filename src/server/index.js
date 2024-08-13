@@ -5,6 +5,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import User from '../../server/models/User.js';
+import { useNavigate } from 'react-router-dom';
 
 
 dotenv.config();
@@ -18,6 +20,33 @@ app.use(cors({
   origin: ['http://localhost:5173', 'https://hvac2go.onrender.com']
 }));
 
+app.get('/api/customers', async (req,res) => {
+  const response = await User.find()
+  if(response){
+    res.status(200).json(response)
+  }
+  console.log('current customers')
+})
+
+app.post('/api/customers', async (req,res) => {
+  try{
+    console.log(req.body)
+
+    const newCustomer = await new User({
+      name:req.body.name,
+      email:req.body.email,
+      phoneNumber: req.body.phoneNumber
+
+    });
+    const savedCustomer = await newCustomer.save();
+    if(savedCustomer){
+        console.log('customer added')
+    }
+}
+catch(err){
+    console.log(err)
+}
+})
 
 
 // const { MONGO_CONNECTION_STRING } = process.env;
