@@ -1,7 +1,9 @@
+// src/components/LandingPage.jsx
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import './LandingPage.css'; // Import the new CSS file
+import Wave from './Wave'; // Ensure you import the Wave component
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+      <Wave /> {/* Add the Wave component here */}
       <div className="logo-container">
         <img src="/images/hvaclogo2.png" alt="Logo" className="logo" />
       </div>
