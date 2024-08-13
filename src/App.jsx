@@ -3,6 +3,8 @@ import LandingPage from './components/LandingPage';
 import HeatingWalkthrough from './components/HeatingWalkthrough';
 import VentilationWalkthrough from './components/VentilationWalkthrough';
 import AirConditioningWalkthrough from './components/AirConditioningWalkthrough';
+import Diagnostic from './components/Diagnostic';
+import NotRunning from './components/NotRunning';
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route path="/heating" element={<HeatingWalkthrough />} />
         <Route path="/ventilation" element={<VentilationWalkthrough />} />
         <Route path="/air-conditioning" element={<AirConditioningWalkthrough />} />
+        <Route path="/air-conditioning/diag" element={<Diagnostic />}/> 
+        <Route path="/air-conditioning/diag2" element={<NotRunning />}/>
       </Routes>
     </Router>
   );

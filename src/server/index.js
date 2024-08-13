@@ -24,13 +24,8 @@ const { MONGO_CONNECTION_STRING } = process.env;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-<<<<<<< HEAD
-// Serve static files from the "dist" directory
-app.use(express.static(path.join(__dirname, '../../dist')));
-=======
 // Serve static files from the "dist" directory at the root of the project
 app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
->>>>>>> d0b2c0e2c82932ca6171a72d879f716f06b04576
 
 // Connect to MongoDB
 mongoose.connect(MONGO_CONNECTION_STRING, {
@@ -47,16 +42,7 @@ mongoose.connect(MONGO_CONNECTION_STRING, {
     console.error('Mongo connection error: ', err.message);
   });
 
-<<<<<<< HEAD
-// API routes
-app.use('/api', userRoutes);
-
-// Serve the React app for all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../dist', 'index.html'));
-=======
 // Handle all other routes by serving the index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'dist', 'index.html'));
->>>>>>> d0b2c0e2c82932ca6171a72d879f716f06b04576
 });

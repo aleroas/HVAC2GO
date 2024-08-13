@@ -43,7 +43,7 @@ const LandingPage = () => {
             Ventilation
           </button>
           <button
-            onClick={() => navigate('/air-conditioning')}
+            onClick={() => navigate('/air-conditioning/diag')}
             className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700"
           >
             Air Conditioning
