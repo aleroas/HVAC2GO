@@ -1,8 +1,7 @@
-// src/components/LandingPage.jsx
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import Wave from './Wave';
+import { useNavigate, Link } from 'react-router-dom';
+import './LandingPage.css'; // Import the new CSS file
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -15,49 +14,55 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <div className="relative flex flex-col items-center justify-center h-screen bg-gray-100 overflow-hidden">
-      {/* Wave component at the top */}
-      <Wave />
-
-      <div className="absolute top-0 left-0 right-0 flex justify-center pt-4">
-        <img src="/images/hvaclogo2.png" alt="Logo" className="w-54 h-42" />
+    <div className="landing-page">
+      <div className="logo-container">
+        <img src="/images/hvaclogo2.png" alt="Logo" className="logo" />
       </div>
 
-      <motion.h1
+      <motion.div
         initial={{ x: -1000 }}
         animate={{ x: 0 }}
         transition={{ duration: 1 }}
-        className="text-4xl font-bold text-center text-gray-800 t-30 z-10"
+        className="text-center bg-white p-8 rounded-lg shadow-lg"
       >
-        Looking to diagnose a problem? Choose a free Walkthrough that is best for you!
-      </motion.h1>
-      {isButtonsVisible && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="flex flex-col mt-4 space-y-4 z-10"
-        >
-          <button
-            onClick={() => navigate('/heating')}
-            className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700"
+        <h1 className="main-title">
+          Looking to diagnose a problem? Choose a free Walkthrough that is best for you!
+        </h1>
+
+        {isButtonsVisible && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            className="button-container"
           >
-            Heating
-          </button>
-          <button
-            onClick={() => navigate('/ventilation')}
-            className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700"
-          >
-            Ventilation
-          </button>
-          <button
-            onClick={() => navigate('/air-conditioning')}
-            className="px-4 py-2 text-lg font-medium text-white bg-teal-500 rounded hover:bg-teal-700"
-          >
-            Air Conditioning
-          </button>
-        </motion.div>
-      )}
+            <button
+              onClick={() => navigate('/heating')}
+              className="option-button"
+            >
+              Heating
+            </button>
+            <button
+              onClick={() => navigate('/ventilation')}
+              className="option-button"
+            >
+              Ventilation
+            </button>
+            <button
+              onClick={() => navigate('/air-conditioning')}
+              className="option-button"
+            >
+              Air Conditioning
+            </button>
+          </motion.div>
+        )}
+
+        {/* Register and Login buttons */}
+        <div className="auth-buttons">
+          <Link to="/register" className="auth-link">Register</Link>
+          <Link to="/login" className="auth-link">Login</Link>
+        </div>
+      </motion.div>
     </div>
   );
 };
