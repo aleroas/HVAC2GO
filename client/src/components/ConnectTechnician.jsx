@@ -90,6 +90,6 @@ const ConnectTechnician = ({ isAuthenticated }) => {
       </div>
     );
   };
-  
+};
   export default ConnectTechnician;
   
