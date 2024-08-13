@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import './LandingPage.css'; // Import the new CSS file
 import Wave from './Wave'; // Ensure you import the Wave component
 
 const LandingPage = () => {
@@ -28,9 +27,7 @@ const LandingPage = () => {
         transition={{ duration: 1 }}
         className="text-center bg-white p-8 rounded-lg shadow-lg"
       >
-        <h1 className="main-title">
-          Looking to diagnose a problem? Choose a free Walkthrough that is best for you!
-        </h1>
+     
 
         {isButtonsVisible && (
           <motion.div
