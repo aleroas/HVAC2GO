@@ -1,7 +1,7 @@
-// src/components/LandingPage.jsx
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import './LandingPage.css'; // Import the new CSS file
 import Wave from './Wave'; // Ensure you import the Wave component
 
 const LandingPage = () => {
@@ -56,12 +56,6 @@ const LandingPage = () => {
             </button>
           </motion.div>
         )}
-
-        {/* Register and Login buttons */}
-        <div className="auth-buttons">
-          <Link to="/register" className="auth-link">Register</Link>
-          <Link to="/login" className="auth-link">Login</Link>
-        </div>
       </motion.div>
     </div>
   );
