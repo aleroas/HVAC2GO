@@ -89,3 +89,10 @@ button:focus-visible {
 .animate-wave {
   animation: waveAnimation 10s linear infinite;
 }
+/* Ensure PayPal buttons are styled and visible */
+.paypal-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
