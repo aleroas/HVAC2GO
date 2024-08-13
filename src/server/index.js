@@ -33,9 +33,6 @@ if (!MONGO_CONNECTION_STRING) {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the "dist" directory
-app.use(express.static(path.join(__dirname, '../../client/dist')));
-
 // Connect to MongoDB
 mongoose.connect(MONGO_CONNECTION_STRING)
   .then(() => {
@@ -54,8 +51,12 @@ app.get('/test', (req, res) => {
 });
 
 // API routes
-app.use('/api/users', userRoutes);
+app.use('/api', userRoutes);
 app.use('/api', paypalRoutes);
+
+// Serve static files from the "dist" directory
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+
 
 // Serve the React app for all other routes
 app.get('*', (req, res) => {

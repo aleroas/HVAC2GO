@@ -51,7 +51,7 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email }).select('+password'); // Ensure password is included
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -68,7 +68,6 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 
 // Get all users (protected route)
 export const getUsers = async (req, res) => {
