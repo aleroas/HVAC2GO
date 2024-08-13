@@ -86,3 +86,7 @@ html, body {
 .animate-wave {
   animation: waveAnimation 10s linear infinite;
 }
+/* Add these styles to your existing index.css */
+
+/* Navbar */
+
