@@ -1,26 +1,25 @@
-// src/index.js
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import userRoutes from './routes/userRoutes.js'; // Note the .js extension
-// import userRoutes from '../src/server/routes/userRoutes.js'; // Note the .js extension
+import userRoutes from './routes/userRoutes.js';
 import paypalRoutes from './routes/paypalRoutes.js';
+
 dotenv.config();
 
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
 const PAYPAL_SECRET_KEY = process.env.PAYPAL_SECRET_KEY;
 
-
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://hvac2go.onrender.com']
+  origin: ['http://localhost:5173', 'https://hvac2go.onrender.com'],
+  credentials: true,
 }));
 
 const MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
@@ -33,9 +32,6 @@ if (!MONGO_CONNECTION_STRING) {
 // Use import.meta.url to get the directory name
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Serve static files from the "dist" directory
-app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Connect to MongoDB
 mongoose.connect(MONGO_CONNECTION_STRING)
@@ -58,7 +54,13 @@ app.get('/test', (req, res) => {
 app.use('/api', userRoutes);
 app.use('/api', paypalRoutes);
 
+// Serve static files from the "dist" directory
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+
 // Serve the React app for all other routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
 });
+
+console.log(`Server running on port ${port}`);

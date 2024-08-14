@@ -5,83 +5,74 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Register a new user
-export const registerUser = async (req, res) => {
-  const { name, email, password, phoneNumber } = req.body;
+const generateToken = (user) => {
+  return jwt.sign(
+    { id: user.id },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+};
 
+export const registerUser = async (req, res) => {
   try {
+    const { name, email, password, phoneNumber } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !password || !phoneNumber) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     user = new User({ name, email, password, phoneNumber });
 
-    // Hash password before saving in database
+    // Hash the password before saving
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
 
     await user.save();
 
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
+    const token = generateToken(user);
+    res.status(201).json({ token, message: "Registration successful" });
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error during registration:", err.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// Authenticate user and get token
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    let user = await User.findOne({ email });
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    let user = await User.findOne({ email }).select('+password'); // Ensure password is included
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
+    const token = generateToken(user);
+    res.status(200).json({ token, message: "Login successful" });
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error during login:", err.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 // Get all users (protected route)
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().select('-password');
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -91,7 +82,7 @@ export const getUsers = async (req, res) => {
 // Get a single user by ID (protected route)
 export const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).select('-password');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -104,7 +95,7 @@ export const getUserById = async (req, res) => {
 // Update a user by ID (protected route)
 export const updateUserById = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).select('-password');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
